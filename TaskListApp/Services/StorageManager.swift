@@ -44,9 +44,8 @@ class StorageManager {
         return task
     }
 
-    func delete(_ index: Int) {
-        let taskToDelete = fetchData()[index]
-        viewContext.delete(taskToDelete)
+    func delete(_ task: Task) {
+        viewContext.delete(task)
         saveContext()
     }
     

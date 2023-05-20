@@ -86,9 +86,9 @@ final class TaskListViewController: UITableViewController {
     }
     
     private func delete(_ indexPath: IndexPath) {
-        taskList.remove(at: indexPath.row)
+        let task = taskList.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
-        storageManager.delete(indexPath.row)
+        storageManager.delete(task)
     }
     
     private func update(_ taskName: String) {
