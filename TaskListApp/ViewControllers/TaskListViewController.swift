@@ -109,7 +109,7 @@ extension TaskListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showAlert(
             withTitle: "Update Task",
-            andMessage: "What do you want to chachge?") { [weak self] task in
+            andMessage: "What do you want to change?") { [weak self] task in
                 self?.update(task)
             }
     }
