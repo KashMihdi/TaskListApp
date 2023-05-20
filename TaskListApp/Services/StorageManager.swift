@@ -40,33 +40,19 @@ class StorageManager {
      func save(_ taskName: String) -> Task {
         let task = Task(context: viewContext)
         task.title = taskName
-        if viewContext.hasChanges {
-            do {
-                try viewContext.save()
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
+        saveContext()
         return task
     }
 
     func delete(_ index: Int) {
         let taskToDelete = fetchData()[index]
         viewContext.delete(taskToDelete)
-        do {
-            try viewContext.save()
-        } catch {
-            print(error.localizedDescription)
-        }
+        saveContext()
     }
     
     func update(_ task: Task, withName taskName: String) -> Task {
             task.title = taskName
-            do {
-                try viewContext.save()
-            } catch {
-                print(error.localizedDescription)
-            }
+            saveContext()
             return task
         }
     
