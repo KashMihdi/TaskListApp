@@ -22,7 +22,7 @@ final class TaskListViewController: UITableViewController {
         setupNavigationBar()
         fetchData()
     }
-    
+
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         taskList.count
@@ -59,7 +59,10 @@ final class TaskListViewController: UITableViewController {
             completion(task)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { [weak self] _ in
+            guard let index = self?.tableView.indexPathForSelectedRow else { return }
+            self?.tableView.deselectRow(at: index, animated: true)
+        }
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         alert.addTextField { [weak self] textText in
@@ -67,7 +70,6 @@ final class TaskListViewController: UITableViewController {
             guard let index = self?.tableView.indexPathForSelectedRow else { return }
             textText.text = self?.taskList[index.row].title
         }
-        
         present(alert, animated: true)
     }
     
@@ -91,6 +93,10 @@ final class TaskListViewController: UITableViewController {
     
     private func update(_ taskName: String) {
         guard let index = tableView.indexPathForSelectedRow else { return }
+        if taskList[index.row].title == taskName {
+            tableView.deselectRow(at: index, animated: true)
+            return
+        }
         var updateElement = taskList[index.row]
         updateElement = storageManager.update(updateElement, withName: taskName)
         tableView.reloadRows(at: [index], with: .automatic)
