@@ -75,14 +75,21 @@ final class TaskListViewController: UITableViewController {
     
     // MARK: - CRUD Methods
     private func fetchData() {
-        taskList = storageManager.fetchData()
+       storageManager.fetchData(completion: { [weak self] result in
+            switch result {
+            case .success(let tasks):
+                self?.taskList = tasks
+                self?.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        })
     }
     
     private func save(_ taskName: String) {
         taskList.append(storageManager.save(taskName))
         let indexPath = IndexPath(row: taskList.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
-        dismiss(animated: true)
     }
     
     private func delete(_ indexPath: IndexPath) {
@@ -91,16 +98,14 @@ final class TaskListViewController: UITableViewController {
         storageManager.delete(task)
     }
     
-    private func update(_ taskName: String) {
-        guard let index = tableView.indexPathForSelectedRow else { return }
-        if taskList[index.row].title == taskName {
-            tableView.deselectRow(at: index, animated: true)
+    private func update(_ taskName: String, _ indexPath: IndexPath) {
+        if taskList[indexPath.row].title == taskName {
+            tableView.deselectRow(at: indexPath, animated: true)
             return
         }
-        var updateElement = taskList[index.row]
-        updateElement = storageManager.update(updateElement, withName: taskName)
-        tableView.reloadRows(at: [index], with: .automatic)
-        dismiss(animated: true)
+        taskList[indexPath.row].title = taskName
+        storageManager.update(taskList[indexPath.row], withName: taskName)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -116,7 +121,7 @@ extension TaskListViewController {
         showAlert(
             withTitle: "Update Task",
             andMessage: "What do you want to change?") { [weak self] task in
-                self?.update(task)
+                self?.update(task, indexPath)
             }
     }
 }

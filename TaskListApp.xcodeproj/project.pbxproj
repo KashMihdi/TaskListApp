@@ -63,9 +63,17 @@
 				FD49CBF52A18EC8700DCDC14 /* Resources */,
 				FD49CBF42A18EC7500DCDC14 /* Storyboards */,
 				FD49CBF32A18EC4400DCDC14 /* App */,
-				A8EFE6352A15406B00B9D0C6 /* TaskListApp.xcdatamodeld */,
+				FD03A98A2A1A53930080DC77 /* Models */,
 			);
 			path = TaskListApp;
+			sourceTree = "<group>";
+		};
+		FD03A98A2A1A53930080DC77 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A8EFE6352A15406B00B9D0C6 /* TaskListApp.xcdatamodeld */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		FD49CBF12A18EC0B00DCDC14 /* Services */ = {

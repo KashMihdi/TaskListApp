@@ -25,35 +25,33 @@ class StorageManager {
     
     private init() {}
     
-// MARK: - CRUD Methods
-    func fetchData() -> [Task] {
+    // MARK: - CRUD Methods
+    func fetchData(completion: (Result<[Task], Error>) -> Void) {
         let fetchRequest = Task.fetchRequest()
-        var taskList: [Task] = []
         do {
-            taskList = try viewContext.fetch(fetchRequest)
+            let taskList = try self.viewContext.fetch(fetchRequest)
+            completion(.success(taskList))
         } catch {
-            print(error.localizedDescription)
+            completion(.failure(error))
         }
-        return taskList
     }
     
-     func save(_ taskName: String) -> Task {
+    func save(_ taskName: String) -> Task {
         let task = Task(context: viewContext)
         task.title = taskName
         saveContext()
         return task
     }
-
+    
     func delete(_ task: Task) {
         viewContext.delete(task)
         saveContext()
     }
     
-    func update(_ task: Task, withName taskName: String) -> Task {
-            task.title = taskName
-            saveContext()
-            return task
-        }
+    func update(_ task: Task, withName taskName: String) {
+        task.title = taskName
+        saveContext()
+    }
     
     // MARK: - Core Data Saving support
     func saveContext() {
